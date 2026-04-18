@@ -230,7 +230,7 @@ Window:Notify({
 })
 
 task.spawn(function()
-    while task.wait(0.05) do
+    while task.wait(0.01) do
         if jitterEnabled then
             if jitterRandom then
                 myArgs[2] = math.random(-180, 180)
