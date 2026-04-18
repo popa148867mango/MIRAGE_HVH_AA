@@ -7,6 +7,7 @@ local myArgs = {
 }
 
 local jitterEnabled = false
+local jitterRandom = false
 local UserInputService = game:GetService("UserInputService");
 
 --// Library
@@ -127,6 +128,15 @@ Window:AddToggle({
 	end,
 }) 
 
+Window:AddToggle({
+	Title = "Toggle head tilt R",
+	Description = "Switching head tilt R",
+	Tab = Main,
+	Callback = function(Boolean1) 
+		jitterRandom = Boolean1
+	end,
+})
+
 -- Window:AddInput({
 -- 	Title = "Input",
 -- 	Description = "Typing",
@@ -220,8 +230,11 @@ Window:Notify({
 })
 
 task.spawn(function()
-    while task.wait(0.1) do
+    while task.wait(0.05) do
         if jitterEnabled then
+            if jitterRandom then
+                myArgs[2] = math.random(-180, 180)
+            end
             remote:FireServer(unpack(myArgs))
         end
     end
