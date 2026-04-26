@@ -7,12 +7,6 @@ local myArgs = {
     0   
 }
 
-local myArgs1 = {
-    "apply",
-    0, 
-    0   
-}
-
 local jitterEnabled = false
 local jitterEnabled1 = false
 local jitterRandom = false
@@ -130,19 +124,24 @@ do
 end
 
 task.spawn(function()
-    while task.wait(0) do
-		if jitterEnabled1 then
-			root.CFrame = root.CFrame * CFrame.Angles(0, math.rad(math.random(jiter_body, jiter_body)), 0)
-		end
-        if jitterEnabled then
-            if jitterRandom then
-				result = rng:NextInteger(-359, 359)
-                myArgs[2] = result
-				remote:FireServer(unpack(myArgs))
-				result = rng:NextInteger(-359, 359)
-                myArgs[2] = result
+    while true do
+        task.wait()
+        local char = game.Players.LocalPlayer.Character
+        local currentRoot = char and char:FindFirstChild("HumanoidRootPart")
+        
+        if currentRoot then
+            if jitterEnabled1 then
+                local randomAngle = rng:NextNumber(-jiter_body, jiter_body)
+                currentRoot.CFrame = currentRoot.CFrame * CFrame.Angles(0, math.rad(randomAngle), 0)
             end
-            remote:FireServer(unpack(myArgs))
+            if jitterEnabled then
+                if jitterRandom then
+                    myArgs[2] = rng:NextInteger(-359, 359)
+                    remote:FireServer(unpack(myArgs))
+                else
+                    remote:FireServer(unpack(myArgs))
+                end
+            end
         end
     end
 end)
